@@ -2,6 +2,7 @@
 backitup.sh
 backupconfig.json
 sources/*
+!sources/example.com
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
