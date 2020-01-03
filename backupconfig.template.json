@@ -1,0 +1,5 @@
+{
+  "user" : "remote_user_name",
+  "keyfile":"/path/to/ssh_key_file",
+  "targetfolder": "/path/to/target/where/all/backups/will/be/stored/by/hostname"
+}
