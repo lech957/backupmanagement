@@ -10,7 +10,7 @@ def getSourcesPath(basedir):
 
 def getHosts(basedir):
     sourcedir=getSourcesPath(basedir)
-    return [f for f in os.listdir(sourcedir) if os.path.isfile(os.path.join(sourcedir, f))]
+    return [f for f in os.listdir(sourcedir) if (os.path.isfile(os.path.join(sourcedir, f)) and (not f == "example.com"))]
 
 def getConfig(filepath):
     with open(filepath, 'r') as f:
@@ -57,7 +57,7 @@ def generateScript(config):
     return lines
 
 def writeFile(lines,outfile):
-    with open(outfile,'a') as file:
+    with open(outfile,'w') as file:
         for l in lines:
             file.write(l+'\n')
 
