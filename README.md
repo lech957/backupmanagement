@@ -1,2 +1,36 @@
-# bcakupmanagement
+# backupmanagement
 coordinates backups though entire network
+
+
+## HowTo
+
+1. Configure the generator script by copying the backupconfig.template.json file to bacjupconfog.json and editing the backupconfig.json file.
+
+2. Create the source description files under [sources]
+* each hosts gets a file named like the hostname [e.g. example.com, mynas]
+* each line within the file must contain a valid path on the remote machine, which has to be backed up
+
+
+3. Run python3 generate.py to generate the backupscript (backitup.sh)
+
+4. run the backitup.sh script manually or create a cron job for it
+
+
+## Prerequisites
+
+- rdiff-backup installed on target machine and installed on remote machine(s)
+- the user set in the config file must exist on the remote system(s)
+- the user must have permissions to read the given paths
+- for automation there must SSH publickey authentication enabled on the remote system and a key available on the target system
+- the path to the keyfile must not contain spaces
+
+## Best practice
+
+- create a separated user on the remote system
+- limit the user to only run rdiff-backup
+- add a sudo entry for the user to enable the user to run rdiff-backup as root, without password (!!!! restrict it to this command!!!)
+
+## TODO
+- paths with spaces
+- SSH port different than 22 (standard)
+- log files
