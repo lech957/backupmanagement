@@ -22,7 +22,7 @@ def getCurrentDir():
 def getDirlistOfHost(basedir,hostname):
     filename=os.path.join(getSourcesPath(basedir),hostname)
     with open(filename) as f:
-        return [x.strip() for x in f.readlines()]
+        return [x.strip() for x in f.readlines() if len(x) > 1]
 
 
 def makeValidRemotePath(p):
@@ -39,8 +39,12 @@ def buildCommandsForHost(basedir,hostname,user,targetdir,keyfilepath=None):
         #!!!! key path is must not contain spaces, since this code will generate invalid commands
     dirs=getDirlistOfHost(basedir,hostname)
     target = os.path.join(targetdir,hostname)
-    return [(prefix+makeValidRemotePath(f)+" "+os.path.join(targetdir,hostname,makeValidLocalRemotePath(f))) for f in dirs]
-
+    res=[]
+    for f in dirs:
+        locpath=os.path.join(targetdir,hostname,makeValidLocalRemotePath(f))
+        res.append("mkdir -p "+locpath)
+        res.append((prefix+makeValidRemotePath(f)+" "+locpath))
+    return res
 
 
 
