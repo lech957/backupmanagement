@@ -1,5 +1,25 @@
 {
   "user" : "remote_user_name",
   "keyfile":"/path/to/ssh_key_file",
-  "targetfolder": "/path/to/target/where/all/backups/will/be/stored/by/hostname"
+  "targetfolder": "/path/to/target/where/all/backups/will/be/stored/by/hostname",
+  "sources":[
+    {
+      "name":"testhost1",
+      "compress" : true,
+      "dirs":[
+        "/path/to/first",
+        "/path/to/second/backupable/folder/"
+      ]
+    },
+    {
+      "name":"testhost2",
+      "compress":false,
+      "port":11111,
+      "dirs":[
+        "/path/to anyDir",
+        "/path/to/another/dir/"
+      ]
+    }
+
+  ]
 }
