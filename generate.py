@@ -41,7 +41,7 @@ def buildCommandsForHost(basedir,host,user,targetdir, keyfilepath=None):
     if ("port" in host) and (not  host["port"] ==22):
         prefix=prefix+"-p "+str(host["port"])+ " "
     if  keyfilepath:
-        prefix=prefix+ "-i "+keyfilepath + " "
+        prefix=prefix+ "-i "+ createCmdlineValidPath(keyfilepath) + " "
         #!!!! key path is must not contain spaces, since this code will generate invalid commands
     if host['compress']:
         prefix=prefix+"-C"

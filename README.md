@@ -1,17 +1,14 @@
 # backupmanagement
-coordinates backups though entire network
+coordinates backups through entire network or locally
 
 
 ## HowTo
 
-1. Configure the generator script by copying the backupconfig.template.json file to bacjupconfog.json and editing the backupconfig.json file.
+1. Configure the generator script by copying the backupconfig.template.json file to backupconfog.json and editing the backupconfig.json file.
 
-2. Create the source description files under [sources]
-* each hosts gets a file named like the hostname [e.g. example.com, mynas]
-* each line within the file must contain a valid path on the remote machine, which has to be backed up
+2. Create the source descriptions in the config file
 
-
-3. Run python3 generate.py to generate the backupscript (backitup.sh)
+3. Run python3 generate.py to generate the backupscript (backitup.sh) and add execution permission if needed
 
 4. run the backitup.sh script manually or create a cron job for it
 
@@ -24,9 +21,11 @@ coordinates backups though entire network
 - for automation there must SSH publickey authentication enabled on the remote system and a key available on the target system
 - the path to the keyfile must not contain spaces
 - the rource path must not be "/" since the source path length must be > 1
+- for local backups rsync must be installed
 
 ## Best practice
 
+### Remote
 - create a separated user on the remote system (useradd -m backuper)
 - add public key (ssh-copy-id)
 - limit the user to only run rdiff-backup (update ~/.ssh/authorized_keys => add "command=rdiff-backup --server" in front of the line with the public key of backuper)
@@ -35,7 +34,10 @@ coordinates backups though entire network
 backuper  ALL=(root)NOPASSWD:/usr/bin/rdiff-backup)
 - create $targetdir/hostname before running script. Or - not recommended - run this skript as sudo in order to create hosts base target directories
 
+### Local
+- set the "local" in sourcedescription to 'true'
+- be aware, that the the delete FLAG is used. If data in the source path have been deleted, it will get deleted in the target path as well!!!!!
+- currently there is no option for exclusions available
+
 ## TODO
-- paths with spaces
-- SSH port different than 22 (standard)
 - log files
