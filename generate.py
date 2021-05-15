@@ -28,6 +28,13 @@ def makeValidRemotePath(p):
 def makeValidLocalRemotePath(p):
     return p.strip("/")+"/"
 
+# creates quotes if theer are special characters
+def createCmdlineValidPath(p):
+    res=p
+    if " " in res:
+        res= f'"{res}"'
+    return res
+
 def buildCommandsForHost(basedir,host,user,targetdir, keyfilepath=None):
     hostname=host["name"]
     prefix="rdiff-backup --remote-schema 'ssh "
@@ -36,14 +43,27 @@ def buildCommandsForHost(basedir,host,user,targetdir, keyfilepath=None):
     if  keyfilepath:
         prefix=prefix+ "-i "+keyfilepath + " "
         #!!!! key path is must not contain spaces, since this code will generate invalid commands
-    prefix=prefix+"-C %s sudo rdiff-backup --server' "+user+"@"+hostname+"::"
+    if host['compress']:
+        prefix=prefix+"-C"
+    prefix=prefix+" %s sudo rdiff-backup --server' "+user+"@"+hostname+"::"
 
     dirs=getDirlistOfHost(host)
     res=[]
     for f in dirs:
-        locpath=os.path.join(targetdir,hostname,makeValidLocalRemotePath(f))
+        locpath=createCmdlineValidPath(os.path.join(targetdir,hostname,makeValidLocalRemotePath(f)))
         res.append("mkdir -p "+locpath)
-        res.append((prefix+makeValidRemotePath(f)+" "+locpath))
+        res.append((prefix+createCmdlineValidPath(makeValidRemotePath(f))+" "+locpath))
+    return res
+
+def buildCommandsLocal(basedir,host,targetdir):
+    hostname=host["name"]
+    prefix="rsync -a --delete "
+    dirs=getDirlistOfHost(host)
+    res=[]
+    for f in dirs:
+        locpath=createCmdlineValidPath(os.path.join(targetdir,hostname,makeValidLocalRemotePath(f)))
+        res.append("mkdir -p "+locpath)
+        res.append((prefix+createCmdlineValidPath(makeValidRemotePath(f))+" "+locpath))
     return res
 
 
@@ -56,8 +76,12 @@ def generateScript(config):
     basedir = getCurrentDir()
     lines.append("#!/bin/bash")
     for h in getHosts(config):
-        for c in buildCommandsForHost(basedir,h,user,targetdirectory,keyfile):
-            lines.append(c)
+        if h["local"]:
+            for c in buildCommandsLocal(basedir,h,targetdirectory):
+                lines.append(c)
+        else:
+            for c in buildCommandsForHost(basedir,h,user,targetdirectory,keyfile):
+                lines.append(c)
     return lines
 
 def writeFile(lines,outfile):

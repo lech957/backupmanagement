@@ -6,6 +6,7 @@
     {
       "name":"testhost1",
       "compress" : true,
+      "local": false,
       "dirs":[
         "/path/to/first",
         "/path/to/second/backupable/folder/"
@@ -14,7 +15,17 @@
     {
       "name":"testhost2",
       "compress":false,
+      "local":false,
       "port":11111,
+      "dirs":[
+        "/path/to anyDir",
+        "/path/to/another/dir/"
+      ]
+    },
+    {
+      "name":"testfolder",
+      "compress":false,
+      "local":true,
       "dirs":[
         "/path/to anyDir",
         "/path/to/another/dir/"
