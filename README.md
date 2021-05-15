@@ -1,5 +1,5 @@
 # backupmanagement
-coordinates backups through entire network or locally
+Backup script generator with rsync, rdiff-backup and python 
 
 
 ## HowTo
