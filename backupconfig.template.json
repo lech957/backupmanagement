@@ -23,6 +23,16 @@
       ]
     },
     {
+      "name":"testhost3",
+      "compress":true,
+      "local":false,
+      "api":201,
+      "dirs":[
+        "/path/to/first",
+        "/path/to/second/backupable/folder/"
+      ]
+    },
+    {
       "name":"testfolder",
       "compress":false,
       "local":true,

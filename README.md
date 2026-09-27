@@ -23,6 +23,29 @@ Backup script generator with rsync, rdiff-backup and python
 - the rource path must not be "/" since the source path length must be > 1
 - for local backups rsync must be installed
 
+
+### API version
+
+Each source (host) can optionally specify an ``"api"`` field that controls which
+rdiff-backup network protocol is used:
+
+| Value | Protocol | Notes |
+|-------|----------|-------|
+| *(omitted)* or ``"legacy"`` or ``200`` | Parent-child protocol (``--remote-schema`` with ``%s`` placeholder, remote side runs ``rdiff-backup --server``) | Default for backward compatibility |
+| ``201`` | Command-based protocol (``{h}`` placeholder, remote side runs ``rdiff-backup server``, ``--api-version 201`` flag) | Requires rdiff-backup 2.1+ on **both** client and server |
+
+Example::
+
+    {
+      "name": "myhost",
+      "compress": true,
+      "api": 201,
+      "local": false,
+      "dirs": [ "/var/data" ]
+    }
+
+You can mix hosts using different API versions within the same config file.
+
 ## Best practice
 
 ### Remote
